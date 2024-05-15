@@ -7,6 +7,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.IaFuture.model.Cliente;
+import br.com.fiap.IaFuture.model.FeedbackCliente;
+import br.com.fiap.IaFuture.model.InteracaoCliente;
 import br.com.fiap.IaFuture.repository.ClienteRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +35,6 @@ public class ClienteController {
 
     @Autowired 
     ClienteRepository repository;
-
 
     @GetMapping
     public List<Cliente> index() {
@@ -47,14 +49,17 @@ public class ClienteController {
     }
 
     @GetMapping("{id_cliente}")
-    public ResponseEntity<Cliente> show(@PathVariable Long id_cliente) {
-        log.info("buscando cliente com id {}", id_cliente);
+    public ResponseEntity<Cliente> getClienteById(@PathVariable Long id_cliente) {
+        Cliente cliente = repository.findById(id_cliente)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com o id: " + id_cliente));
 
-        return repository
-                .findById(id_cliente)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        List<InteracaoCliente> interacoes = repository.findInteracoesByClienteId(id_cliente);
+        cliente.setInteracoes(interacoes);
 
+        List<FeedbackCliente> feedbacks = repository.findFeedbacksByClienteId(id_cliente);
+        cliente.setFeedbacks(feedbacks);
+
+        return ResponseEntity.ok(cliente);
     }
 
     @DeleteMapping("{id_cliente}")
@@ -73,7 +78,7 @@ public class ClienteController {
         cliente.setId_cliente(id_cliente);
         return repository.save(cliente);
     }
-
+    
     private void verificarSeClienteExiste(Long id_cliente) {
         repository
                 .findById(id_cliente)

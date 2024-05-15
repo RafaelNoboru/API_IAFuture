@@ -5,8 +5,10 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +21,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.fiap.IaFuture.model.Cliente;
 import br.com.fiap.IaFuture.model.InteracaoCliente;
+import br.com.fiap.IaFuture.repository.ClienteRepository;
 import br.com.fiap.IaFuture.repository.InteracaoClienteRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +37,9 @@ public class InteracaoClienteController {
     @Autowired 
     InteracaoClienteRepository repository;
 
+    @Autowired
+    ClienteRepository clienteRepository;
+
     @GetMapping
     public List<InteracaoCliente> index() {
         return repository.findAll();
@@ -45,15 +52,40 @@ public class InteracaoClienteController {
         return repository.save(interacaoCliente);
     }
 
-    @GetMapping("{id_interacao}")
-    public ResponseEntity<InteracaoCliente> show(@PathVariable Long id_interacao) {
-        log.info("buscando interação com id {}", id_interacao);
+    @PostMapping("{id_cliente}")
+    public ResponseEntity<InteracaoCliente> criarInteracao(@PathVariable Long id_cliente, @RequestBody InteracaoCliente interacaoCliente) {
+        Optional<Cliente> clienteOptional = clienteRepository.findById(id_cliente);
+        if (clienteOptional.isPresent()) {
+            Cliente cliente = clienteOptional.get();
+            interacaoCliente.setCliente(cliente); 
+            InteracaoCliente novaInteracao = repository.save(interacaoCliente);
+            return ResponseEntity.status(HttpStatus.CREATED).body(novaInteracao);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-        return repository
-                .findById(id_interacao)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    // @GetMapping("{id_interacao}")
+    // public ResponseEntity<InteracaoCliente> show(@PathVariable Long id_interacao) {
+    //     log.info("buscando interação com id {}", id_interacao);
 
+    //     return repository
+    //             .findById(id_interacao)
+    //             .map(ResponseEntity::ok)
+    //             .orElse(ResponseEntity.notFound().build());
+
+    // }
+
+    @GetMapping("{id_cliente}")
+    public ResponseEntity<List<InteracaoCliente>> obterInteracoesCliente(@PathVariable Long id_cliente) {
+        Optional<Cliente> clienteOptional = clienteRepository.findById(id_cliente);
+        if (clienteOptional.isPresent()) {
+            Cliente cliente = clienteOptional.get();
+            List<InteracaoCliente> interacoes = cliente.getInteracoes();
+            return ResponseEntity.ok(interacoes);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("{id_interacao}")

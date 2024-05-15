@@ -1,6 +1,5 @@
 package br.com.fiap.IaFuture.controller;
 
-import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,17 +31,9 @@ public class ContaController {
     @Autowired 
     ContaRepository repository;
 
-
     @GetMapping
     public List<Conta> index() {
         return repository.findAll();
-    }
-
-    @PostMapping
-    @ResponseStatus(CREATED)
-    public Conta create(@RequestBody @Valid Conta conta) {
-        log.info("Cadastrando conta {}", conta);
-        return repository.save(conta);
     }
 
     @GetMapping("{id_conta}")
@@ -55,6 +45,15 @@ public class ContaController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
 
+    }
+    
+    @GetMapping("ultimos")
+    public List<Conta> getLast10() {
+        return repository.findLast10();
+    }
+    @GetMapping("ordemalfabetica")
+    public List<Conta> getOrderedByName() {
+        return repository.findAllOrderedByName();
     }
 
     @DeleteMapping("{id_conta}")

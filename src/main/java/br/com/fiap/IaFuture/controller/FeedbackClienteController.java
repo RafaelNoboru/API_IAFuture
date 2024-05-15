@@ -5,8 +5,10 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +21,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.fiap.IaFuture.model.Cliente;
 import br.com.fiap.IaFuture.model.FeedbackCliente;
+import br.com.fiap.IaFuture.repository.ClienteRepository;
 import br.com.fiap.IaFuture.repository.FeedbackClienteRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +36,9 @@ public class FeedbackClienteController {
     
     @Autowired 
     FeedbackClienteRepository repository;
-
+    
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     @GetMapping
     public List<FeedbackCliente> index() {
@@ -45,16 +51,41 @@ public class FeedbackClienteController {
         log.info("Cadastrando feedback {}", feedbackCliente);
         return repository.save(feedbackCliente);
     }
+    
+    @PostMapping("{id_cliente}")
+    public ResponseEntity<FeedbackCliente> criarFeedback(@PathVariable Long id_cliente, @RequestBody FeedbackCliente feedbackCliente) {
+        Optional<Cliente> clienteOptional = clienteRepository.findById(id_cliente);
+        if (clienteOptional.isPresent()) {
+            Cliente cliente = clienteOptional.get();
+            feedbackCliente.setCliente(cliente); 
+            FeedbackCliente novoFeedback = repository.save(feedbackCliente);
+            return ResponseEntity.status(HttpStatus.CREATED).body(novoFeedback);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-    @GetMapping("{id_feedback}")
-    public ResponseEntity<FeedbackCliente> show(@PathVariable Long id_feedback) {
-        log.info("buscando feedback com id {}", id_feedback);
+    // @GetMapping("{id_feedback}")
+    // public ResponseEntity<FeedbackCliente> show(@PathVariable Long id_feedback) {
+    //     log.info("buscando feedback com id {}", id_feedback);
 
-        return repository
-                .findById(id_feedback)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    //     return repository
+    //             .findById(id_feedback)
+    //             .map(ResponseEntity::ok)
+    //             .orElse(ResponseEntity.notFound().build());
 
+    // }
+    
+    @GetMapping("{id_cliente}")
+    public ResponseEntity<List<FeedbackCliente>> obterFeedbacksCliente(@PathVariable Long id_cliente) {
+        Optional<Cliente> clienteOptional = clienteRepository.findById(id_cliente);
+        if (clienteOptional.isPresent()) {
+            Cliente cliente = clienteOptional.get();
+            List<FeedbackCliente> feedbacks = cliente.getFeedbacks();
+            return ResponseEntity.ok(feedbacks);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("{id_feedback}")

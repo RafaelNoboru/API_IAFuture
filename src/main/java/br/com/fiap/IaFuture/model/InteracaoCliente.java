@@ -2,12 +2,15 @@ package br.com.fiap.IaFuture.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
@@ -18,9 +21,7 @@ public class InteracaoCliente {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id_interacao;
     
-    @NotNull
-    private Long id_cliente;
-    
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data_interacao;
     
     @Column(length = 20)
@@ -38,4 +39,9 @@ public class InteracaoCliente {
         message = "Canal deve ser facebook, instagram, twitter, site, email"
     )
     private String canal;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_cliente")
+    private Cliente cliente;
 }
+
