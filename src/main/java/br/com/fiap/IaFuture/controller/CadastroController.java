@@ -1,8 +1,8 @@
 package br.com.fiap.IaFuture.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 import java.util.List;
 
@@ -46,8 +46,8 @@ public class CadastroController {
 
     @GetMapping
     @Operation(
-        summary = "Listar todos os cadastros",
-        description = "Retorna um array com todos os cadastros no formato do objeto"
+        summary = "Listar todos os cadastros.",
+        description = "Retorna um array com todos os cadastros no formato do objeto."
     )
     public List<Cadastro> index() {
         return repository.findAll();
@@ -56,13 +56,13 @@ public class CadastroController {
     @PostMapping("registro")
     @ResponseStatus(CREATED)
     @Operation(
-        summary = "Realizar um cadastro",
-        description = "Cria um novo cadastro com os dados enviados no corpo da requisição"
+        summary = "Realizar um cadastro.",
+        description = "Cria um novo cadastro com os dados enviados no corpo da requisição."
     )
     @ApiResponses(
         value = {
-            @ApiResponse(responseCode = "201", description = "Cadastro efetuado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados enviados são inválidos. Verifique o corpo da requisição", useReturnTypeSchema = false)
+            @ApiResponse(responseCode = "201", description = "Cadastro efetuado com sucesso."),
+            @ApiResponse(responseCode = "400", description = "Dados enviados são inválidos. Verifique o corpo da requisição.", useReturnTypeSchema = false)
         }
     )
     public void register(@RequestBody @Valid Cadastro cadastro) {
@@ -76,6 +76,16 @@ public class CadastroController {
     }
 
     @GetMapping("{id_cadastro}")
+    @Operation(
+        summary = "Buscar um cadastro pelo ID.",
+        description = "Retorna os detalhes do cadastro através do `id` informado como parâmetro de path."
+    )
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "Os dados do cadastro foram retornados com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Não existe cadastro com o `id` informado.", useReturnTypeSchema = false)
+        }
+    )
     public ResponseEntity<Cadastro> show(@PathVariable Long id_cadastro) {
         log.info("buscando cadastro com id {}", id_cadastro);
 
@@ -87,16 +97,16 @@ public class CadastroController {
 
     @GetMapping("ultimos")
     @Operation(
-        summary = "Listar os últimos 10 cadastros",
-        description = "Retorna um array com todos os últimos 10 cadastros no formato do objeto"
+        summary = "Listar os últimos 10 cadastros.",
+        description = "Retorna um array com todos os últimos 10 cadastros no formato do objeto."
     )
     public List<Cadastro> getLast10() {
         return repository.findLast10();
     }
     @GetMapping("ordemalfabetica")
     @Operation(
-        summary = "Listar todos os cadastros em ordem alfabética",
-        description = "Retorna um array com todos os cadastros em ordem alfabética e no formato do objeto"
+        summary = "Listar todos os cadastros em ordem alfabética.",
+        description = "Retorna um array com todos os cadastros em ordem alfabética e no formato do objeto."
     )
     public List<Cadastro> getOrderedByName() {
         return repository.findAllOrderedByName();
@@ -105,13 +115,13 @@ public class CadastroController {
     @DeleteMapping("{id_cadastro}")
     @ResponseStatus(NO_CONTENT)
     @Operation(
-        summary = "Deletar um cadastro pelo ID",
-        description = "Deleta todos os dados de um cadastro através do ID especificado no parâmetro path"
+        summary = "Deletar um cadastro pelo ID.",
+        description = "Deleta todos os dados de um cadastro através do ID especificado no parâmetro path."
     )
     @ApiResponses(
         value = {
-            @ApiResponse(responseCode = "204", description = "Cadastro apagado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Não existe cadastro com o `id` informado", useReturnTypeSchema = false)
+            @ApiResponse(responseCode = "204", description = "Cadastro apagado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Não existe cadastro com o `id` informado.", useReturnTypeSchema = false)
         }
     )
     public void destroy(@PathVariable Long id_cadastro) {
@@ -122,14 +132,14 @@ public class CadastroController {
 
     @PutMapping("{id_cadastro}")
     @Operation(
-        summary = "Atualiza os dados de um cadastro pelo ID",
+        summary = "Atualizar os dados de um cadastro pelo ID.",
         description = "Altera os dados do cadastro especificado no `id`, utilizando as informações enviadas no corpo da requisição."
     )
     @ApiResponses(
         value = {
-            @ApiResponse(responseCode = "200", description = "Cadastro alterado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados enviados são inválidos. Verifique o corpo da requisição", useReturnTypeSchema = false),
-            @ApiResponse(responseCode = "404", description = "Não existe cadastro com o `id` informado", useReturnTypeSchema = false)
+            @ApiResponse(responseCode = "200", description = "Cadastro alterado com sucesso."),
+            @ApiResponse(responseCode = "400", description = "Dados enviados são inválidos. Verifique o corpo da requisição.", useReturnTypeSchema = false),
+            @ApiResponse(responseCode = "404", description = "Não existe cadastro com o `id` informado.", useReturnTypeSchema = false)
         }
     )
     public Cadastro update(@PathVariable Long id_cadastro, @Valid @RequestBody Cadastro cadastro) {
