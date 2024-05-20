@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +42,7 @@ public class ResultadoIaController {
     ResultadoIaRepository repository;
 
     @GetMapping
+    @Cacheable
     @Operation(
         summary = "Listar todos os resultados.",
         description = "Retorna um array com todos os resultados no formato do objeto."
@@ -50,6 +53,7 @@ public class ResultadoIaController {
 
     @PostMapping
     @ResponseStatus(CREATED)
+    @CacheEvict(allEntries = true)
     @Operation(
         summary = "Cadastrar um resultado em um ID de cliente específico.",
         description = "Cria um novo resultado com os dados enviados no corpo da requisição."
@@ -88,6 +92,7 @@ public class ResultadoIaController {
 
     @DeleteMapping("{id_resultadoIa}")
     @ResponseStatus(NO_CONTENT)
+    @CacheEvict(allEntries = true)
     @Operation(
         summary = "Deletar um resultado pelo ID.",
         description = "Deleta todos os dados de um resultado através do ID especificado no parâmetro path."
@@ -105,6 +110,7 @@ public class ResultadoIaController {
     }
 
     @PutMapping("{id_resultadoIa}")
+    @CacheEvict(allEntries = true)
     @Operation(
         summary = "Atualizar os dados de um resultado pelo ID.",
         description = "Altera os dados do resultado especificado no `id`, utilizando as informações enviadas no corpo da requisição."

@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +42,7 @@ public class LoginController {
     LoginRepository repository;
 
     @GetMapping
+    @Cacheable
     @Operation(
         summary = "Listar todos os logins.",
         description = "Retorna um array com todos os logins no formato do objeto."
@@ -50,6 +53,7 @@ public class LoginController {
 
     @PostMapping
     @ResponseStatus(CREATED)
+    @CacheEvict(allEntries = true)
     @Operation(
         summary = "Cadastrar um novo login.",
         description = "Cadastra um novo login com os dados enviados no corpo da requisição."
@@ -88,6 +92,7 @@ public class LoginController {
 
     @DeleteMapping("{id_login}")
     @ResponseStatus(NO_CONTENT)
+    @CacheEvict(allEntries = true)
     @Operation(
         summary = "Deletar um login pelo ID.",
         description = "Deleta todos os dados de um login através do ID especificado no parâmetro path."
@@ -105,6 +110,7 @@ public class LoginController {
     }
 
     @PutMapping("{id_login}")
+    @CacheEvict(allEntries = true)
     @Operation(
         summary = "Atualiza os dados de um login pelo ID.",
         description = "Altera os dados do login especificado no `id`, utilizando as informações enviadas no corpo da requisição."
