@@ -20,8 +20,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "contas/{username}").permitAll()
                 .requestMatchers(HttpMethod.PUT, "contas").authenticated()
                 .requestMatchers(HttpMethod.POST, "contas").permitAll()
-                .requestMatchers(HttpMethod.POST, "login").permitAll()
-                .requestMatchers(HttpMethod.PUT, "login").authenticated()
+                .requestMatchers(HttpMethod.POST, "login").authenticated()
+                .requestMatchers(HttpMethod.GET, "resultados").authenticated()
                 .anyRequest().authenticated()
     );
         http.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -1,4 +1,4 @@
-package br.com.fiap.IaFuture.model;
+package br.com.fiap.IaFuture.clientes;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,27 +23,27 @@ import lombok.Data;
 public class Cliente {
     
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id_cliente;
+    Long id_cliente;
     
     @NotBlank
-    private String nome;
+    String nome;
     
     @NotBlank
-    private String email;
+    String email;
     
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate data_nascimento;
+    LocalDate data_nascimento;
 
     @CPF(message = "Cpf deve ser válido")
     @NotBlank
-    private String cpf;
+    String cpf;
 
     @NotBlank
-    private String telefone;
+    String telefone;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-    private List<InteracaoCliente> interacoes;
+    List<InteracaoCliente> interacoes;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-    private List<FeedbackCliente> feedbacks;
+    List<FeedbackCliente> feedbacks;
 }

@@ -1,4 +1,4 @@
-package br.com.fiap.IaFuture.model;
+package br.com.fiap.IaFuture.clientes;
 
 import java.time.LocalDate;
 
