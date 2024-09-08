@@ -16,13 +16,15 @@ public class SecurityConfig {
     public SecurityFilterChain config(HttpSecurity http, AuthorizationFilter authorizationFilter) throws Exception {
         http.csrf(csrf -> csrf.disable());
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.GET, "contas").permitAll()
-                .requestMatchers(HttpMethod.GET, "contas/{username}").permitAll()
+                .requestMatchers(HttpMethod.POST, "login").permitAll()
+                .requestMatchers(HttpMethod.GET, "contas").authenticated()
+                .requestMatchers(HttpMethod.GET, "contas/{username}").authenticated()
                 .requestMatchers(HttpMethod.PUT, "contas").authenticated()
                 .requestMatchers(HttpMethod.POST, "contas").permitAll()
-                .requestMatchers(HttpMethod.POST, "login").authenticated()
                 .requestMatchers(HttpMethod.GET, "resultados").authenticated()
-                .anyRequest().authenticated()
+                .requestMatchers(HttpMethod.POST, "resultados").permitAll()
+                .requestMatchers(HttpMethod.GET, "clientes").authenticated()
+                .requestMatchers(HttpMethod.POST, "clientes").permitAll()
     );
         http.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

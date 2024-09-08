@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/contas")
+@CrossOrigin(origins = "http://localhost:3030")
 public class ContaController {
 
     @Autowired
@@ -26,13 +27,8 @@ public class ContaController {
 
     @GetMapping("/{username}")
     public ResponseEntity<Conta> getContaByUsername(@PathVariable String username) {
-        Conta conta = contaService.findByUsername(username);
-        if (conta != null) {
-            return ResponseEntity.ok(conta);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+        Optional<Conta> conta = contaRepository.findByUsername(username);
+        return conta.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());}
 
     @GetMapping
     public List<Conta> listarContas() {

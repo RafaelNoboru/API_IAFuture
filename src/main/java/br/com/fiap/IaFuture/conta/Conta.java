@@ -1,10 +1,12 @@
 package br.com.fiap.IaFuture.conta;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.UniqueElements;
 
 @Data
 @Entity
@@ -35,8 +37,11 @@ public class Conta {
 
     String numero;
 
+    @Column(unique = true)
+    @NotNull
     String username;
 
+    @NotNull
     String senha;
 
 }
