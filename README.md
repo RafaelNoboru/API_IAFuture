@@ -10,13 +10,11 @@ API do projeto IaFuture - Software que controla resultados de análises feitas p
 - Matheus de Andrade Ferreira - RM:99375 – 2TDSPK
 - Larissa Pereira Biusse - RM:551062 - 2TDSPK
 
--> A atividade foi realizada pelo aluno Rafael Noboru dentro de um período de duas semanas, iniciado no dia 06/05/24.
-
 # Como rodar a aplicação
 
-- Tenha a extensão de Java instalada no programa Visual Studio Code, depois vá em alguma classe java e clique em "Run Java";
-- É possível acessar o Banco de Dados tanto no h2 através do endereço "http://localhost:8080/h2-console" e acessar o arquivo "application.properties" e colocar "dev" após o "=" em "spring.profiles.active=". Também é possivel pelo Oracle PL/SQL, basta acessar o arquivo "application.properties" e colocar "prod" após o "=" em "spring.profiles.active="; 
-- Utilize o arquivo JSON disponibilizado na pasta dos documentos e execute no programa POSTMAN para conseguir executar o CRUD das classes.
+- Iniicialize a aplicação com o VS Code Studio ou IntelliJ;
+- Para testar os endpoints apenas no backend, utilize um programa como o Postman ou o Insomnia
+- Basta inicializar a aplicação para que os endpoints funcionem.
 
 # Objetivos da aplicação
 
@@ -36,8 +34,15 @@ API do projeto IaFuture - Software que controla resultados de análises feitas p
 - Algumas pequenas mudanças na parte de Validação nos atributos das classes e também alguns atributos foram modificados.
 - É possível acessar o Banco de Dados tanto no h2 através do endereço "http://localhost:8080/h2-console" e acessar o arquivo "application.properties" e colocar "dev" após o "=" em "spring.profiles.active=". Também é possivel pelo Oracle PL/SQL, basta acessar o arquivo "application.properties" e colocar "prod" após o "=" em "spring.profiles.active="; 
 
-# Diagrama
+# Diagrama (desatualizado)
 
 ![alt text](Diagrama.png)
+
+# Mudanças da Sprint 2 para a Sprint 3
+
+- Mudanças em algumas classes;
+- Implementação de classes de serviço;
+- Possui controle de usuários e senhas, consequentemente filtros de autorização;
+- A aplicação possui integração com um frontend utilizando SHAD UI e possui total interação com o usuário.
 
 
