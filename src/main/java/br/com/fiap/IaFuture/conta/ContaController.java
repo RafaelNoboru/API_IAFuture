@@ -27,8 +27,13 @@ public class ContaController {
 
     @GetMapping("/{username}")
     public ResponseEntity<Conta> getContaByUsername(@PathVariable String username) {
-        Optional<Conta> conta = contaRepository.findByUsername(username);
-        return conta.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());}
+        Conta conta = contaService.findByUsername(username);
+        if (conta != null) {
+            return ResponseEntity.ok(conta);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @GetMapping
     public List<Conta> listarContas() {

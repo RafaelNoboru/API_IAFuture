@@ -17,13 +17,13 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable());
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.POST, "login").permitAll()
-                .requestMatchers(HttpMethod.GET, "contas").authenticated()
-                .requestMatchers(HttpMethod.GET, "contas/{username}").authenticated()
+                .requestMatchers(HttpMethod.GET, "contas").permitAll()
+                .requestMatchers(HttpMethod.GET, "contas/{username}").permitAll()
                 .requestMatchers(HttpMethod.PUT, "contas").authenticated()
                 .requestMatchers(HttpMethod.POST, "contas").permitAll()
-                .requestMatchers(HttpMethod.GET, "resultados").authenticated()
+                .requestMatchers(HttpMethod.GET, "resultados").permitAll()
                 .requestMatchers(HttpMethod.POST, "resultados").permitAll()
-                .requestMatchers(HttpMethod.GET, "clientes").authenticated()
+                .requestMatchers(HttpMethod.GET, "clientes").permitAll()
                 .requestMatchers(HttpMethod.POST, "clientes").permitAll()
     );
         http.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
